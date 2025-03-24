@@ -30,3 +30,9 @@ To run this project locally, you'll need:
   *For example, you can use [Live Server for VS Code](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) or Python’s built-in HTTP server.*
 
 ## Usage
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone https://github.com/nincaleb/nitrotypelb.git
+   cd nitrotypelb
