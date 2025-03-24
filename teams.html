@@ -66,14 +66,14 @@
       color: #fff !important;
       border: 1px solid #444 !important;
     }
-    table.dataTable tbody tr:hover {
-      background-color: #2e2e2e !important;
-    }
     table.dataTable thead th.sorting,
     table.dataTable thead th.sorting_asc,
     table.dataTable thead th.sorting_desc {
       background-color: #1e1e1e !important;
       color: #fff !important;
+    }
+    table.dataTable tbody tr:hover {
+      background-color: #2e2e2e !important;
     }
   </style>
 </head>
@@ -91,6 +91,8 @@
         <th>Rank</th>
         <th>Team</th>
         <th>Total Points</th>
+        <th>Racers</th>
+        <th>Races</th>
       </tr>
     </thead>
   </table>
@@ -100,6 +102,7 @@
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script>
+    // Helper: Format date as YYYYMMDD for file names.
     function formatDate(date) {
       const y = date.getFullYear();
       const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -120,13 +123,19 @@
           .map((t, i) => ({
             rank: i + 1,
             team: t.Team,
-            points: t.TotalPoints
+            points: t.TotalPoints,
+            racers: t.Racers || 0,  // CSV field for number of racers on the team
+            races: t.Races || 0     // CSV field for total team races
           }));
 
         $('#teamLeaderboard').DataTable({
           data: teamData,
           pageLength: 50,
           order: [[2, 'desc']],
+          columnDefs: [
+            // For every column use a descending order as the default sort sequence.
+            { targets: '_all', orderSequence: ["desc", "asc"] }
+          ],
           dom: '<"top"lf>rt<"bottom"ip>',
           columns: [
             { data: 'rank' },
@@ -138,7 +147,9 @@
                 </a>
               `
             },
-            { data: 'points' }
+            { data: 'points' },
+            { data: 'racers' },
+            { data: 'races' }
           ],
           initComplete: function() {
             $('.dataTables_filter label').css('color', '#fff');

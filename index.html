@@ -121,10 +121,8 @@
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script>
-    // Update "Last Updated" time when the page loads.
- // Update "Last Updated" date when the page loads.
-document.getElementById("updateTime").textContent = new Date().toLocaleDateString();
-
+    // Update "Last Updated" date (only the date, no time)
+    document.getElementById("updateTime").textContent = new Date().toLocaleDateString();
 
     // Helper: Format date as YYYYMMDD for file names.
     function formatDate(date) {
@@ -157,6 +155,10 @@ document.getElementById("updateTime").textContent = new Date().toLocaleDateStrin
           data: processedData,
           pageLength: 100,
           order: [[2, 'desc']],
+          columnDefs: [
+            // For every column use a descending order as the default sort sequence.
+            { targets: '_all', orderSequence: ["desc", "asc"] }
+          ],
           dom: '<"top"lf>rt<"bottom"ip>',
           columns: [
             { data: 'rank' },
