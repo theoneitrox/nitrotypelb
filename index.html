@@ -22,6 +22,14 @@
       text-decoration: none;
       font-weight: bold;
     }
+    .request-link {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .request-link a {
+      color: #4aa3df;
+      font-weight: bold;
+    }
     h1 {
       text-align: center;
       font-size: 2.5em;
@@ -39,7 +47,6 @@
       font-size: 1.1em;
       color: #ccc;
     }
-    
     /* DataTables dark styling */
     .dataTables_wrapper {
       color: #fff;
@@ -61,7 +68,6 @@
     .dataTables_info {
       color: #ccc !important;
     }
-    
     /* Override table backgrounds and borders */
     table.dataTable {
       background-color: #121212;
@@ -98,6 +104,14 @@
     <a href="index.html">Players</a>
     <a href="teams.html">Teams</a>
   </nav>
+
+  <!-- Google Form request link at the top -->
+  <div class="request-link">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScn1hSm12gN-W-h3rrm6VpNa9lI_4u2yVuXGqTaEihU4yHc9A/viewform?usp=dialog" target="_blank">
+      Request for a Team to be Added
+    </a>
+  </div>
+  
   <h1>NitroType Player Leaderboard</h1>
   <div id="lastUpdated">Last Updated: <span id="updateTime"></span></div>
   <div id="message">Loading leaderboard...</div>
@@ -156,7 +170,7 @@
           pageLength: 100,
           order: [[2, 'desc']],
           columnDefs: [
-            // For every column use a descending order as the default sort sequence.
+            // For every column, use descending order as the default sort sequence.
             { targets: '_all', orderSequence: ["desc", "asc"] }
           ],
           dom: '<"top"lf>rt<"bottom"ip>',
