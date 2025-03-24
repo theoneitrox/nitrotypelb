@@ -3,7 +3,7 @@
 This repository contains two main components:
 
 1. **Python Script:**  
-   A script to fetch seasonal statistics from the NitroType API for a predefined list of team tags. It processes player data to calculate additional metrics (like accuracy and speed) and generates two CSV files:
+   A script (`nitrotype_leaderboard.py`) to fetch seasonal statistics from the NitroType API for a predefined list of team tags. It processes player data to calculate additional metrics (like accuracy and speed) and generates two CSV files:
    - A player leaderboard sorted by Points (highest first).
    - A team leaderboard that aggregates points for each team.
    
@@ -28,7 +28,7 @@ This repository contains two main components:
   - **Speed (WPM):** Computed using the formula `(((points / races) / accuracy) - 100) * 2`.
 
 - **CSV Generation:**  
-  Produces two CSV files with the current date (formatted as YYYYMMDD):
+  Produces two CSV files with the current date (formatted as `YYYYMMDD`):
   - `nitrotype_season_leaderboard_YYYYMMDD.csv`
   - `nitrotype_team_leaderboard_YYYYMMDD.csv`
 
@@ -45,7 +45,7 @@ This repository contains two main components:
 
 - **Google Form Integration:**  
   Each page features a link at the top allowing users to request that a new team be added to the leaderboard.  
-  (Link: [Request for a Team to be Added](https://docs.google.com/forms/d/e/1FAIpQLScn1hSm12gN-W-h3rrm6VpNa9lI_4u2yVuXGqTaEihU4yHc9A/viewform?usp=dialog))
+  [Request for a Team to be Added](https://docs.google.com/forms/d/e/1FAIpQLScn1hSm12gN-W-h3rrm6VpNa9lI_4u2yVuXGqTaEihU4yHc9A/viewform?usp=dialog)
 
 ---
 
@@ -64,51 +64,65 @@ This repository contains two main components:
 ### For the Python Script
 
 1. **Dependencies:**  
-   Ensure you have Python 3.6 or higher and install the following packages:
+   Ensure you have Python 3.6 or higher and install the required packages:
    ```bash
    pip install requests pandas
-Configuration:
+   ```
 
-The script uses a predefined list of team tags in the TEAM_TAGS variable. Adjust this list as needed.
+2. **Configuration:**  
+   - The script uses a predefined list of team tags in the `TEAM_TAGS` variable. Adjust this list as needed.
+   - Helper functions within the script calculate accuracy and speed from the API data.
 
-Helper functions within the script calculate accuracy and speed from the API data.
+3. **Running the Script:**  
+   Execute the script to generate the CSV files:
+   ```bash
+   python nitrotype_leaderboard.py
+   ```
+   CSV files will be created in the repository’s root directory with names that include the current date.
 
-Running the Script: Execute the script to generate the CSV files:
+### For the HTML Pages
 
-bash
-python nitrotype_leaderboard.py
-CSV files will be created in the repository’s root directory with names that include the current date.
+1. **CSV Files:**  
+   Ensure that the generated CSV files are present in the same directory as `index.html` and `teams.html`.
 
-For the HTML Pages
-CSV Files: Ensure that the generated CSV files are present in the same directory as index.html and teams.html.
+2. **Local Testing:**  
+   For best results, run a local web server (this avoids issues with file URL restrictions). For example, using Python’s built-in HTTP server:
+   ```bash
+   python -m http.server 8000
+   ```
+   Then visit:
+   - [http://localhost:8000/index.html](http://localhost:8000/index.html) for the player leaderboard.
+   - [http://localhost:8000/teams.html](http://localhost:8000/teams.html) for the team leaderboard.
 
-Local Testing: For best results, run a local web server (this avoids issues with file URL restrictions). For example, using Python’s built-in HTTP server:
+3. **Customization:**  
+   - Adjust the embedded CSS in the `<style>` sections of the HTML files to change the appearance (such as dark mode colors, fonts, etc.).
+   - Modify the Google Form URL in the `.request-link` sections if you’re using a different form.
 
-bash
-python -m http.server 8000
-Then visit:
+---
 
-http://localhost:8000/index.html for the player leaderboard.
+## Customization Options
 
-http://localhost:8000/teams.html for the team leaderboard.
+- **Team Tags and Data Calculations:**  
+  Modify the `TEAM_TAGS` variable and helper functions (`calculate_accuracy`, `calculate_speed`) in `nitrotype_leaderboard.py` as needed.
 
-Customization:
+- **HTML Styling and Features:**  
+  Both HTML pages feature embedded CSS for dark mode styling. Adjust the styles or DataTables configuration (e.g., modifying the default sort order or appearance) to suit your preferences.
 
-Adjust the embedded CSS in the <style> sections of the HTML files to change the appearance (such as dark mode colors, fonts, etc.).
+- **Google Form:**  
+  The Google Form link appears at the top of each page. You can update this link by changing the URL in the corresponding HTML files.
 
-Modify the Google Form URL in the .request-link sections if you’re using a different form.
+---
 
-Customization Options
-Team Tags and Data Calculations: Modify the TEAM_TAGS variable and helper functions (calculate_accuracy, calculate_speed) in nitrotype_leaderboard.py to suit changes in API structure or your data requirements.
+## Contributing
 
-HTML Styling and Features: Both HTML pages feature embedded CSS for dark mode styling. Adjust the styles or DataTables configuration (e.g., modifying the default sort order or appearance) according to your preferences.
-
-Google Form: The Google Form link is placed at the top of each page. You can update this link at any time by modifying the URL in the corresponding HTML files.
-
-Contributing
 If you have ideas for improvements or additional features, please feel free to fork the repository and submit a pull request. For major changes, opening an issue first to discuss your ideas is appreciated.
 
-License
-This project is licensed under the MIT License.
+---
 
-Happy coding and racing!
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+*Happy coding and racing!*
