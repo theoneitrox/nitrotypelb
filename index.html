@@ -5,289 +5,30 @@
   <title>NitroType Seasonal Leaderboard</title>
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
-  <!-- Google Fonts - Montserrat -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      text-size-adjust: none;
-    }
-
-    body {
-      background: url(/static/images/background.webp),linear-gradient(130deg,#2e3141,#2e3141 20%,#303343 0,#303343 25%,#2e3141 0,#2e3141 27%,#303343 0,#303343 50%,#2e3141 0,#2e3141 85%,#303343 0,#303343 90%,#2e3141 0);
-      background-repeat: repeat-x;
-      background-attachment: fixed;
-      font-size: 100%;
-      margin: 0;
-      min-height: 100vh;
-      min-width: 1064px;
-      overflow-y: scroll;
-      position: relative;
-      font-family: "Montserrat", sans-serif;
-      color: #fff;
-      line-height: 1.6;
-    }
-
-    .content {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: rgba(0, 0, 0, 0);
-    }
-
-    .lbs-content {
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .banner {
-      line-height: 1.6;
-      background: linear-gradient(90deg, #1C99F4 60%, #167ac3 100%);
-      padding-left: 25px;
-      padding-right: 25px;
-      padding-top: 13px;
-      padding-bottom: 10px;
-      border-radius: 20px 20px 0 0;
-      display: flex;
-      flex-direction: row;
-    }
-
-    .banner-header {
-      display: flex;
-      width: 100%;
-      color: #fff;
-      font-family: "Montserrat", sans-serif;
-      font-weight: 600;
-      font-size: 35px;
-      margin-bottom: 0;
-      text-shadow: 0 2px 2px rgba(2, 2, 2, 0.25);
-    }
-
-    .leaderboard-box {
-      padding-left: 10px;
-      padding-right: 10px;
-      padding-top: 10px;
-      padding-bottom: 50px;
-    }
-
-    /* DataTables customization */
-    #leaderboard.dataTable {
-      width: 100% !important;
-      margin: 0 auto;
-      border-collapse: collapse;
-      background-color: #303343;
-    }
-
-    #leaderboard.dataTable thead th,
-    #leaderboard.dataTable thead td {
-      background: #4F505E;
-      color: #fff;
-      font-family: "Montserrat", sans-serif;
-      font-weight: 300;
-      font-size: 16px;
-      padding: 15px 8px;
-      border-bottom: none;
-    }
-
-    #leaderboard.dataTable tbody tr {
-      background-color: #303343;
-    }
-
-    #leaderboard.dataTable tbody tr:nth-child(odd) {
-      background-color: #292C3B;
-    }
-
-    #leaderboard.dataTable tbody td {
-      color: #fff;
-      font-family: "Montserrat", sans-serif;
-      font-weight: 300;
-      font-size: 16px;
-      padding: 12px 8px;
-      border-top: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    #leaderboard.dataTable tbody tr:hover td {
-      background-color: #3B3D4C;
-    }
-
-    .dataTables_wrapper .dataTables_paginate {
-      margin-top: 20px;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-      color: #fff !important;
-      border: 1px solid #666 !important;
-      background: transparent !important;
-      margin-left: 5px !important;
-      margin-right: 5px !important;
-      border-radius: 5px !important;
-      padding: 5px 12px !important;
-      font-family: "Montserrat", sans-serif !important;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-      background: #585e7d !important;
-      color: #e2e3eb !important;
-      border: 1px solid #666 !important;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-      background: #167ac3 !important;
-      border-color: transparent !important;
-      color: #fff !important;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-      color: #666 !important;
-      opacity: 0.5 !important;
-    }
-
-    .dataTables_wrapper .dataTables_length,
-    .dataTables_wrapper .dataTables_filter,
-    .dataTables_wrapper .dataTables_info {
-      color: #fff;
-      font-family: "Montserrat", sans-serif;
-    }
-
-    .dataTables_wrapper .dataTables_filter input {
-      background-color: #20222e;
-      border: 1px solid #666;
-      color: #fff;
-      padding: 8px;
-      border-radius: 5px;
-      margin-left: 10px;
-    }
-
-    .dataTables_wrapper .dataTables_length select {
-      background-color: #20222e;
-      border: 1px solid #666;
-      color: #fff;
-      padding: 8px;
-      border-radius: 5px;
-      margin-left: 10px;
-      margin-right: 10px;
-    }
-
-    .dataTables_wrapper .dataTables_info {
-      padding-top: 15px;
-    }
-
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #2E3141;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #4F505E;
-      border-radius: 5px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #61626E;
-    }
-
-    .loading-message {
-      text-align: center;
-      margin: 20px 0;
-      font-family: "Montserrat", sans-serif;
-      font-size: 18px;
-      color: #F9D034;
-    }
-
-    .display-name {
-      color: #92daf7;
-      text-decoration: none;
-    }
-
-    .display-name:hover {
-      text-decoration: underline;
-    }
-
-    .team-text {
-      color: #F9D034;
-      text-decoration: none;
-    }
-
-    .team-text:hover {
-      text-decoration: underline;
-    }
-
-    /* Fix for sorted column header */
-    #leaderboard.dataTable thead th.sorting_asc,
-    #leaderboard.dataTable thead th.sorting_desc {
-      background-color: #4F505E !important;
-      color: #fff !important;
-    }
-
-    #leaderboard.dataTable thead th.sorting,
-    #leaderboard.dataTable thead th.sorting_asc,
-    #leaderboard.dataTable thead th.sorting_desc {
-      color: #fff !important;
-      background-image: none !important;
-      position: relative;
-      padding-right: 30px;
-    }
-
-    #leaderboard.dataTable thead th.sorting:after,
-    #leaderboard.dataTable thead th.sorting_asc:after,
-    #leaderboard.dataTable thead th.sorting_desc:after {
-      font-family: "Montserrat", sans-serif;
-      position: absolute;
-      right: 8px;
-      color: #F9D034;
-      font-size: 14px;
-    }
-
-    #leaderboard.dataTable thead th.sorting:after {
-      content: "↕";
-      opacity: 0.6;
-    }
-
-    #leaderboard.dataTable thead th.sorting_asc:after {
-      content: "↑";
-    }
-
-    #leaderboard.dataTable thead th.sorting_desc:after {
-      content: "↓";
-    }
-
-    #leaderboard.dataTable thead th.sorting:hover:after {
-      opacity: 1;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { text-align: center; }
+    #message { text-align: center; margin-bottom: 20px; }
+    table { margin: 0 auto; width: 90%; }
   </style>
 </head>
 <body>
-  <div class="content">
-    <div class="lbs-content">
-      <div class="banner">
-        <div class="banner-left">
-          <h1 class="banner-header">NitroType Seasonal Leaderboard</h1>
-        </div>
-      </div>
-
-      <div class="leaderboard-box">
-        <div id="message" class="loading-message">Loading leaderboard...</div>
-        <table id="leaderboard" class="display">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Display Name</th>
-              <th>Points</th>
-              <th>Speed (WPM)</th>
-              <th>Accuracy (%)</th>
-              <th>Races</th>
-              <th>Team</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+  <h1>NitroType Seasonal Leaderboard</h1>
+  <div id="message">Loading leaderboard...</div>
+  <table id="leaderboard" class="display">
+    <thead>
+      <tr>
+        <th>Display Name</th>
+        <th>Profile Link</th>
+        <th>Points</th>
+        <th>Speed (WPM)</th>
+        <th>Accuracy (%)</th>
+        <th>Races</th>
+        <th>Team</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -317,9 +58,8 @@
       complete: function(results) {
         const data = results.data;
         let tableBody = '';
-        let rank = 1;
-
         data.forEach(function(row) {
+          // Use fallback keys if necessary
           let displayName = row["Display Name"] || row["DisplayName"] || "";
           let profileLink = row["Profile Link"] || row["ProfileLink"] || "";
           let points = row["Points"] || "";
@@ -328,37 +68,35 @@
           let races = row["Races"] || "";
           let team = row["Team"] || "";
 
+          // Format speed: round to nearest whole number
           if (speed !== "") {
             speed = Math.round(parseFloat(speed));
           }
+          // Format accuracy: round to 2 decimal places
           if (accuracy !== "") {
             accuracy = parseFloat(accuracy).toFixed(2);
           }
 
           tableBody += '<tr>';
-          tableBody += '<td>' + rank + '</td>';
-          tableBody += '<td><a href="' + profileLink + '" class="display-name" target="_blank">' + displayName + '</a></td>';
+          tableBody += '<td>' + displayName + '</td>';
+          tableBody += '<td><a href="' + profileLink + '" target="_blank">' + profileLink + '</a></td>';
           tableBody += '<td>' + points + '</td>';
           tableBody += '<td>' + speed + '</td>';
           tableBody += '<td>' + accuracy + '</td>';
           tableBody += '<td>' + races + '</td>';
-          tableBody += '<td><a href="https://www.nitrotype.com/team/' + team + '" class="team-text" target="_blank">' + team + '</a></td>';
+          tableBody += '<td>' + team + '</td>';
           tableBody += '</tr>';
-          rank++;
         });
-
         $('#leaderboard tbody').html(tableBody);
+        $('#message').html('Leaderboard loaded.');
+        // Initialize DataTable with 100 entries per page, default order by Points (column index 2)
         $('#leaderboard').DataTable({
-          paging: true,
-          pageLength: 25,
-          lengthChange: false,
-          searching: false,
-          info: true,
-          ordering: true,
-          order: [[2, 'desc']] // Default sorting by Points (2nd column)
+          "pageLength": 100,
+          "order": [[2, "desc"]]
         });
-
-        $('#message').hide();
+      },
+      error: function(err) {
+        $('#message').html('Error loading CSV file: ' + err);
       }
     });
   </script>
