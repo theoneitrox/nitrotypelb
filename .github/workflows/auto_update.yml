@@ -2,8 +2,8 @@ name: Update NitroType Leaderboards
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Runs every 6 hours at minute 0 (e.g. 00:00, 06:00, 12:00, 18:00)
-  workflow_dispatch:        # Allows manual triggering from the GitHub Actions tab
+    - cron: '0 */6 * * *'  # Runs every 6 hours on the hour
+  workflow_dispatch:       # Allows manual triggering from GitHub Actions
 
 jobs:
   update-leaderboards:
@@ -22,19 +22,24 @@ jobs:
         run: |
           pip install requests pandas
 
-      - name: Run Leaderboard Script
+      - name: Run NitroType leaderboard script
         run: |
           python nitrotype_leaderboard.py
 
+      - name: Configure Git
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+
       - name: Commit Changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
           git add .
-          # Only commit if there are changes; prevent error exit if nothing changed
+          # Only commit if there are changes to prevent errors
           git diff-index --quiet HEAD || git commit -m "Auto update leaderboard at $(date)"
-      
+
       - name: Push Changes
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+
