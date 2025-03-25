@@ -156,9 +156,9 @@
           .map((t, i) => ({
             rank: i + 1,
             team: t.Team,
-            points: t.TotalPoints,
-            racers: t.Racers || 0,  // CSV field for number of racers on the team
-            races: t.Races || 0     // CSV field for total team races
+            points: Math.round(parseFloat(t.TotalPoints)) || 0,  // Round Total Points to nearest whole number
+            racers: t.Racers || 0,  // Number of racers in the team
+            races: t.Races || 0     // Total races played by the team
           }));
 
         $('#teamLeaderboard').DataTable({

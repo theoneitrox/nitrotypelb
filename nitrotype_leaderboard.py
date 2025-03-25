@@ -25,6 +25,7 @@ HEADERS = {
 }
 
 def get_team_data(team_tag, retries=3, delay=5):
+    """Fetch season data and stats from the API for a team."""
     url = f"https://www.nitrotype.com/api/v2/teams/{team_tag}"
     for attempt in range(retries):
         try:
@@ -32,21 +33,38 @@ def get_team_data(team_tag, retries=3, delay=5):
             if response.status_code == 200:
                 data = response.json()
                 if data.get('status') == 'OK':
-                    return data['results'].get('season', []), data['results'].get('board', {})
-            return [], {}
+                    season = data['results'].get('season', [])
+                    stats = data['results'].get('stats', [])
+                    return season, stats
+            return [], []
         except Exception as e:
             print(f"Error fetching data for team {team_tag}: {e}")
             time.sleep(delay)
-    return [], {}
+    return [], []
+
+def get_team_stats(stats):
+    """Extract relevant stats from 'board: season'."""
+    for stat in stats:
+        if stat.get('board') == 'season':
+            return {
+                'typed': int(stat.get('typed', 0)),  # Convert to integer
+                'secs': int(stat.get('secs', 0)),    # Convert to integer
+                'played': int(stat.get('played', 0)),  # Convert to integer
+                'errs': int(stat.get('errs', 0))    # Convert to integer
+            }
+    return {'typed': 0, 'secs': 0, 'played': 0, 'errs': 0}
+
+def calculate_wpm(typed, secs):
+    """Calculate WPM (words per minute) from typed characters and seconds."""
+    return (typed / 5) / (secs / 60) if secs > 0 else 0
+
+def calculate_points(wpm, accuracy, races):
+    """Calculate total points using the formula per race."""
+    return (100 + (wpm / 2)) * accuracy * races
 
 def calculate_accuracy(typed, errs):
+    """Calculate accuracy as a percentage."""
     return (typed - errs) / typed if typed > 0 else 0
-
-def calculate_speed(points, accuracy, races):
-    if accuracy > 0 and races > 0:
-        wpm = (((points / races) / accuracy) - 100) * 2
-        return wpm
-    return 0
 
 # Save the timestamp of the script execution
 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -54,18 +72,34 @@ with open("timestamp.txt", "w") as file:
     file.write(f"Last Updated: {timestamp}")
 
 all_players = []
-team_races = {}  # Store team races based on "played" value from the API
+team_summary = {}  # Store team stats
 
 for team_tag in TEAM_TAGS:
-    season_data, board_data = get_team_data(team_tag)
+    season_data, stats_data = get_team_data(team_tag)
     if not season_data:
         print(f"No seasonal data found for team {team_tag}")
         continue
 
-    # Fetch the "played" value from the board section for team races
-    team_played = board_data.get("played", 0)
-    team_races[team_tag] = team_played
+    # Extract team stats from 'board: season'
+    team_stats = get_team_stats(stats_data)
+    typed = team_stats['typed']
+    secs = team_stats['secs']
+    played = team_stats['played']
+    errs = team_stats['errs']
 
+    # Calculate team-level WPM, accuracy, and total points
+    accuracy = calculate_accuracy(typed, errs)
+    wpm = calculate_wpm(typed, secs)
+    points = calculate_points(wpm, accuracy, played)
+
+    team_summary[team_tag] = {
+        'Team': team_tag,
+        'TotalPoints': points,
+        'Racers': sum(1 for player in season_data if player.get('points') is not None),
+        'Races': played
+    }
+
+    # Process individual players
     for member in season_data:
         if member.get('points') is not None:
             username = member.get('username', 'N/A')
@@ -76,12 +110,12 @@ for team_tag in TEAM_TAGS:
             hue_angle = member.get('carHueAngle', 0)
 
             points = member.get('points', 0)
-            typed = member.get('typed', 0)
-            errs = member.get('errs', 0)
-            races = member.get('played', 0)
+            typed = int(member.get('typed', 0))  # Convert to integer
+            errs = int(member.get('errs', 0))    # Convert to integer
+            races = int(member.get('played', 0)) # Convert to integer
 
             accuracy = calculate_accuracy(typed, errs)
-            speed = calculate_speed(points, accuracy, races)
+            speed = calculate_wpm(typed, secs)
 
             all_players.append({
                 'Username': username,
@@ -105,16 +139,6 @@ else:
 
     timestamp_filename = datetime.now().strftime("%Y%m%d")
     df.to_csv(f'nitrotype_season_leaderboard_{timestamp_filename}.csv', index=False)
-
-    # Team aggregation: Including TotalPoints, Racers, and Team Races (from API board section)
-    team_summary = {}
-    for team_tag, races in team_races.items():
-        team_summary[team_tag] = {
-            'Team': team_tag,
-            'TotalPoints': sum(player['Points'] for player in all_players if player['Team'] == team_tag),
-            'Racers': sum(1 for player in all_players if player['Team'] == team_tag),
-            'Races': races  # Directly using the played value from board section
-        }
 
     df_teams = pd.DataFrame(list(team_summary.values()))
     df_teams = df_teams.sort_values(by='TotalPoints', ascending=False)
