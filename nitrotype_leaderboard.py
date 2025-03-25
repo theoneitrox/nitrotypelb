@@ -24,20 +24,20 @@ HEADERS = {
     "Accept": "application/json",
 }
 
-def get_season_stats(team_tag, retries=3, delay=5):
+def get_team_data(team_tag, retries=3, delay=5):
     url = f"https://www.nitrotype.com/api/v2/teams/{team_tag}"
     for attempt in range(retries):
         try:
             response = requests.get(url, headers=HEADERS, timeout=10, verify=True)
             if response.status_code == 200:
                 data = response.json()
-                if data.get('status') == 'OK' and 'season' in data['results']:
-                    return data['results']['season']
-            return []
+                if data.get('status') == 'OK':
+                    return data['results'].get('season', []), data['results'].get('board', {})
+            return [], {}
         except Exception as e:
             print(f"Error fetching data for team {team_tag}: {e}")
             time.sleep(delay)
-    return []
+    return [], {}
 
 def calculate_accuracy(typed, errs):
     return (typed - errs) / typed if typed > 0 else 0
@@ -54,11 +54,17 @@ with open("timestamp.txt", "w") as file:
     file.write(f"Last Updated: {timestamp}")
 
 all_players = []
+team_races = {}  # Store team races based on "played" value from the API
+
 for team_tag in TEAM_TAGS:
-    season_data = get_season_stats(team_tag)
+    season_data, board_data = get_team_data(team_tag)
     if not season_data:
         print(f"No seasonal data found for team {team_tag}")
         continue
+
+    # Fetch the "played" value from the board section for team races
+    team_played = board_data.get("played", 0)
+    team_races[team_tag] = team_played
 
     for member in season_data:
         if member.get('points') is not None:
@@ -100,20 +106,15 @@ else:
     timestamp_filename = datetime.now().strftime("%Y%m%d")
     df.to_csv(f'nitrotype_season_leaderboard_{timestamp_filename}.csv', index=False)
 
-    # Team aggregation: Including TotalPoints, Racers, and Races for each team
+    # Team aggregation: Including TotalPoints, Racers, and Team Races (from API board section)
     team_summary = {}
-    for player in all_players:
-        team = player['Team']
-        if team not in team_summary:
-            team_summary[team] = {
-                'Team': team,
-                'TotalPoints': 0,
-                'Racers': 0,
-                'Races': 0
-            }
-        team_summary[team]['TotalPoints'] += player['Points']
-        team_summary[team]['Racers'] += 1
-        team_summary[team]['Races'] += player['Races']
+    for team_tag, races in team_races.items():
+        team_summary[team_tag] = {
+            'Team': team_tag,
+            'TotalPoints': sum(player['Points'] for player in all_players if player['Team'] == team_tag),
+            'Racers': sum(1 for player in all_players if player['Team'] == team_tag),
+            'Races': races  # Directly using the played value from board section
+        }
 
     df_teams = pd.DataFrame(list(team_summary.values()))
     df_teams = df_teams.sort_values(by='TotalPoints', ascending=False)
