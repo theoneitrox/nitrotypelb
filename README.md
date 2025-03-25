@@ -139,4 +139,4 @@ This project is licensed under the [MIT License](LICENSE).
 *Happy coding and racing!*
 ```
 
-This markdown file is ready to be added to your repository as `README.md`. Let me know if there are any more changes you'd like!
+
