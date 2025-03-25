@@ -8,7 +8,7 @@ TEAM_TAGS = [
     "CAM0", "NCT", "PSR", "N8TE", "FASZ", "SER", "T0WER", "ZH", "LOVGOD", "DLX",
     "RVNT", "RIV4L", "FAM3", "RZ", "EXOTIC", "RI5E", "VFU", "SNTL", "SAIL", "HONT",
     "NTRS34", "NTT", "2VCTRY", "T3X5", "ST0RM", "DUAL", "AMPX", "TNGN", "ZSH", "VLN",
-    "CATPLT", "4cu", "BRAVE", "NS7", "WTRMN", "AL0N3D", "NI1TRO", "LOFH", "DIV1",
+    "CATPLT", "4CU", "BRAVE", "NS7", "WTRMN", "AL0N3D", "NI1TRO", "LOFH", "DIV1",
     "NTW", "LLJ4R", "UNREST", "NGREEN", "TRUST", "GSGMWO", "LSH", "HZE", "BAYLOR",
     "OVCR", "LTC", "SG1MAS", "XWX", "FERARI", "DCPTCN", "RL1", "RL", "AL3", "HELIUM",
     "NTP444", "SSNAKS", "NHS", "DOGGIS", "2S", "0PT", "ESTER", "ASPN", "50I", "MED13L",
@@ -16,7 +16,7 @@ TEAM_TAGS = [
     "TOTUF7", "F0J", "D4RKER", "TALK", "VXL", "LE4GUE", "TWO", "FUZHOU", "SK4P", "VTI",
     "GLZ", "B0MBA", "KAPOK", "ERC", "SPRME", "BMW", "NT20", "NT", "CYCV", "PTB", "XS9",
     "KBSM", "190IQ", "PCMSG", "FRLB", "ZER0SE", "PR2WX", "CZBZ", "M1NE", "NTM", "MEYBO",
-    "LXW"
+    "LXW", "ZH", "SPRINT", "EMZ", "BMW"
 ]
 
 HEADERS = {
