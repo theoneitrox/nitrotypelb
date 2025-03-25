@@ -8,14 +8,14 @@ TEAM_TAGS = [
     "CAM0", "NCT", "PSR", "N8TE", "FASZ", "SER", "T0WER", "ZH", "LOVGOD", "DLX",
     "RVNT", "RIV4L", "FAM3", "RZ", "EXOTIC", "RI5E", "VFU", "SNTL", "SAIL", "HONT",
     "NTRS34", "NTT", "2VCTRY", "T3X5", "ST0RM", "DUAL", "AMPX", "TNGN", "ZSH", "VLN",
-    "CATPLT", "STRGRI", "BRAVE", "NS7", "WTRMN", "LVR96", "NI1TRO", "LOFH", "DIV1",
+    "CATPLT", "4cu", "BRAVE", "NS7", "WTRMN", "AL0N3D", "NI1TRO", "LOFH", "DIV1",
     "NTW", "LLJ4R", "UNREST", "NGREEN", "TRUST", "GSGMWO", "LSH", "HZE", "BAYLOR",
     "OVCR", "LTC", "SG1MAS", "XWX", "FERARI", "DCPTCN", "RL1", "RL", "AL3", "HELIUM",
     "NTP444", "SSNAKS", "NHS", "DOGGIS", "2S", "0PT", "ESTER", "ASPN", "50I", "MED13L",
     "FLAGZ", "JTAU", "W2V", "WPMWPM", "SZM", "4EP", "TGNM", "ZTAGZ", "PIGFLY", "KR0W",
     "TOTUF7", "F0J", "D4RKER", "TALK", "VXL", "LE4GUE", "TWO", "FUZHOU", "SK4P", "VTI",
     "GLZ", "B0MBA", "KAPOK", "ERC", "SPRME", "BMW", "NT20", "NT", "CYCV", "PTB", "XS9",
-    "KBSM", "190IQ", "PCMSG", "FRLB", "ZER0SE", "PR2WX", "CZBZ", "M1NE", "P1NKS", "MEYBO",
+    "KBSM", "190IQ", "PCMSG", "FRLB", "ZER0SE", "PR2WX", "CZBZ", "M1NE", "NTM", "MEYBO",
     "LXW"
 ]
 
@@ -47,6 +47,11 @@ def calculate_speed(points, accuracy, races):
         wpm = (((points / races) / accuracy) - 100) * 2
         return wpm
     return 0
+
+# Save the timestamp of the script execution
+timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+with open("timestamp.txt", "w") as file:
+    file.write(f"Last Updated: {timestamp}")
 
 all_players = []
 for team_tag in TEAM_TAGS:
@@ -92,16 +97,24 @@ else:
     df = pd.DataFrame(all_players)
     df = df.sort_values(by='Points', ascending=False)
 
-    timestamp = datetime.now().strftime("%Y%m%d")
-    df.to_csv(f'nitrotype_season_leaderboard_{timestamp}.csv', index=False)
+    timestamp_filename = datetime.now().strftime("%Y%m%d")
+    df.to_csv(f'nitrotype_season_leaderboard_{timestamp_filename}.csv', index=False)
 
-    team_totals = {}
+    # Team aggregation: Including TotalPoints, Racers, and Races for each team
+    team_summary = {}
     for player in all_players:
         team = player['Team']
-        if team not in team_totals:
-            team_totals[team] = 0
-        team_totals[team] += player['Points']
+        if team not in team_summary:
+            team_summary[team] = {
+                'Team': team,
+                'TotalPoints': 0,
+                'Racers': 0,
+                'Races': 0
+            }
+        team_summary[team]['TotalPoints'] += player['Points']
+        team_summary[team]['Racers'] += 1
+        team_summary[team]['Races'] += player['Races']
 
-    df_teams = pd.DataFrame([{'Team': t, 'TotalPoints': v} for t, v in team_totals.items()])
+    df_teams = pd.DataFrame(list(team_summary.values()))
     df_teams = df_teams.sort_values(by='TotalPoints', ascending=False)
-    df_teams.to_csv(f'nitrotype_team_leaderboard_{timestamp}.csv', index=False)
+    df_teams.to_csv(f'nitrotype_team_leaderboard_{timestamp_filename}.csv', index=False)

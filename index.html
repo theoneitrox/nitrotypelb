@@ -113,7 +113,7 @@
   </div>
   
   <h1>NitroType Player Leaderboard</h1>
-  <div id="lastUpdated">Last Updated: <span id="updateTime"></span></div>
+  <div id="lastUpdated">Loading...</div>
   <div id="message">Loading leaderboard...</div>
   
   <table id="leaderboard" class="display" style="width:100%">
@@ -135,8 +135,16 @@
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script>
-    // Update "Last Updated" date (only the date, no time)
-    document.getElementById("updateTime").textContent = new Date().toLocaleDateString();
+    // Fetch the timestamp from timestamp.txt
+    fetch("timestamp.txt")
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById("lastUpdated").textContent = text;
+      })
+      .catch(error => {
+        console.error("Error fetching the timestamp:", error);
+        document.getElementById("lastUpdated").textContent = "Last Updated: Error loading timestamp.";
+      });
 
     // Helper: Format date as YYYYMMDD for file names.
     function formatDate(date) {
