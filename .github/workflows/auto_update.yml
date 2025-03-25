@@ -2,12 +2,14 @@ name: Update NitroType Leaderboards
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Runs every 6 hours on the hour
-  workflow_dispatch:       # Allows manual triggering
+    - cron: '0 */6 * * *'  # Runs every 6 hours on the hour (e.g., 00:00, 06:00, 12:00, 18:00)
+  workflow_dispatch:       # Allows manual triggering from GitHub Actions
 
 jobs:
   update-leaderboards:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Ensure the workflow has permission to push changes
 
     steps:
       - name: Checkout Repository
@@ -36,7 +38,6 @@ jobs:
           # Only commit if there are changes
           git diff-index --quiet HEAD || git commit -m "Auto update leaderboard at $(date)"
 
-      - name: Push Changes with PAT
-        run: git push https://$PAT_TOKEN@github.com/nincaleb/nitrotypelb.git main
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+      - name: Push Changes using PAT
+        run: |
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/nincaleb/nitrotypelb.git main
