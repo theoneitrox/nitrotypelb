@@ -3,7 +3,7 @@ name: Update NitroType Leaderboards
 on:
   schedule:
     - cron: '0 */6 * * *'  # Runs every 6 hours on the hour
-  workflow_dispatch:       # Allows manual triggering from GitHub Actions
+  workflow_dispatch:       # Allows manual triggering
 
 jobs:
   update-leaderboards:
@@ -16,30 +16,27 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Install Dependencies
         run: |
           pip install requests pandas
 
-      - name: Run NitroType leaderboard script
-        run: |
-          python nitrotype_leaderboard.py
+      - name: Run NitroType Leaderboard Script
+        run: python nitrotype_leaderboard.py
 
       - name: Configure Git
         run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
 
       - name: Commit Changes
         run: |
           git add .
-          # Only commit if there are changes to prevent errors
+          # Only commit if there are changes
           git diff-index --quiet HEAD || git commit -m "Auto update leaderboard at $(date)"
 
-      - name: Push Changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-
+      - name: Push Changes with PAT
+        run: git push https://$PAT_TOKEN@github.com/nincaleb/nitrotypelb.git main
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
