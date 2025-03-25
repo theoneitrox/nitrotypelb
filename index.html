@@ -166,7 +166,7 @@
           displayName: row.DisplayName || 'Unknown',
           profileLink: row.ProfileLink || '#',
           title: row.Title || 'No Title',
-          points: Math.round(parseFloat(row.Points)) || 0,  // Round points to nearest whole number
+          points: Math.round(parseFloat(row.Points)) || 0,   // Round points
           speed: Math.round(row.Speed) || 0,
           accuracy: parseFloat(row.Accuracy).toFixed(2) || 0,
           races: row.Races || 0,
@@ -178,7 +178,6 @@
           pageLength: 100,
           order: [[2, 'desc']],
           columnDefs: [
-            // For every column, use descending order as the default sort sequence.
             { targets: '_all', orderSequence: ["desc", "asc"] }
           ],
           dom: '<"top"lf>rt<"bottom"ip>',
@@ -194,10 +193,20 @@
                 <span class="subtitle">"${data.title}"</span>
               `
             },
-            { data: 'points' },
+            { 
+              data: 'points',
+              render: function(data, type, row) {
+                return type === 'display' ? Number(data).toLocaleString() : data;
+              }
+            },
             { data: 'speed' },
             { data: 'accuracy' },
-            { data: 'races' },
+            { 
+              data: 'races',
+              render: function(data, type, row) {
+                return type === 'display' ? Number(data).toLocaleString() : data;
+              }
+            },
             { 
               data: 'team',
               render: (team) => team ? `

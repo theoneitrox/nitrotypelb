@@ -47,7 +47,6 @@
       font-size: 1.1em;
       color: #ccc;
     }
-    
     /* DataTables dark styling */
     .dataTables_wrapper {
       color: #fff;
@@ -174,15 +173,25 @@
             { data: 'rank' },
             { 
               data: 'team',
-              render: (team) => `
+              render: (team) => team ? `
                 <a href="https://nitrotype.com/team/${team}" target="_blank" style="color: #6fcc7c;">
                   ${team}
                 </a>
-              `
+              ` : ''
             },
-            { data: 'points' },
+            { 
+              data: 'points',
+              render: function(data, type, row) {
+                return type === 'display' ? Number(data).toLocaleString() : data;
+              }
+            },
             { data: 'racers' },
-            { data: 'races' }
+            { 
+              data: 'races',
+              render: function(data, type, row) {
+                return type === 'display' ? Number(data).toLocaleString() : data;
+              }
+            }
           ],
           initComplete: function() {
             $('.dataTables_filter label').css('color', '#fff');
