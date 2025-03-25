@@ -1,6 +1,4 @@
-Here’s the entire README provided in markdown format:
 
-```markdown
 # NitroType Season Leaderboards
 
 This repository contains two main components:
