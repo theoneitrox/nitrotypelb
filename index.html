@@ -166,7 +166,7 @@
           displayName: row.DisplayName || 'Unknown',
           profileLink: row.ProfileLink || '#',
           title: row.Title || 'No Title',
-          points: parseFloat(row.Points) || 0,
+          points: Math.round(parseFloat(row.Points)) || 0,  // Round points to nearest whole number
           speed: Math.round(row.Speed) || 0,
           accuracy: parseFloat(row.Accuracy).toFixed(2) || 0,
           races: row.Races || 0,

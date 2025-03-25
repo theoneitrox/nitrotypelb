@@ -109,13 +109,16 @@ for team_tag in TEAM_TAGS:
             car_id = member.get('carID', 0)
             hue_angle = member.get('carHueAngle', 0)
 
-            points = member.get('points', 0)
+            # Convert values to integers
             typed = int(member.get('typed', 0))  # Convert to integer
+            secs = int(member.get('secs', 0))    # Convert to integer
             errs = int(member.get('errs', 0))    # Convert to integer
-            races = int(member.get('played', 0)) # Convert to integer
+            races = int(member.get('played', 0))  # Convert to integer
 
-            accuracy = calculate_accuracy(typed, errs)
+            # Correct WPM calculation
             speed = calculate_wpm(typed, secs)
+            accuracy = calculate_accuracy(typed, errs)
+            points = calculate_points(speed, accuracy, races)
 
             all_players.append({
                 'Username': username,
@@ -127,7 +130,7 @@ for team_tag in TEAM_TAGS:
                 'Speed': speed,
                 'Races': races,
                 'Points': points,
-                'Accuracy': accuracy * 100,
+                'Accuracy': accuracy * 100,  # Convert to percentage for display
                 'Team': team_tag
             })
 
