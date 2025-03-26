@@ -132,7 +132,7 @@
         // Create a Date using UTC string by appending ' UTC'
         const utcDate = new Date(serverTimestamp + " UTC");
         // Display the date as a locale string, with "UTC" label appended.
-        document.getElementById("lastUpdated").textContent = "Last Updated (UTC): " + utcDate.toLocaleString() + " UTC";
+        document.getElementById("lastUpdated").textContent = "Last Updated (Your Local Time): " + utcDate.toLocaleString() + " ";
       })
       .catch(error => {
         console.error("Error fetching the timestamp:", error);
