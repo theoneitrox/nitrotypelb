@@ -25,6 +25,7 @@ HEADERS = {
     "Accept": "application/json",
 }
 
+
 def get_team_data(team_tag, retries=3, delay=5):
     """Fetch season data and stats from the API for a team."""
     url = f"https://www.nitrotype.com/api/v2/teams/{team_tag}"
@@ -43,34 +44,39 @@ def get_team_data(team_tag, retries=3, delay=5):
             time.sleep(delay)
     return [], []
 
+
 def get_team_stats(stats):
-    """Extract relevant stats from 'board: season'."""
+    """Extract relevant stats from the 'board: season'."""
     for stat in stats:
         if stat.get('board') == 'season':
             return {
-                'typed': int(stat.get('typed', 0)),  # Convert to integer
-                'secs': int(stat.get('secs', 0)),    # Convert to integer
-                'played': int(stat.get('played', 0)),  # Convert to integer
-                'errs': int(stat.get('errs', 0))    # Convert to integer
+                'typed': int(stat.get('typed', 0)),
+                'secs': int(stat.get('secs', 0)),
+                'played': int(stat.get('played', 0)),
+                'errs': int(stat.get('errs', 0))
             }
     return {'typed': 0, 'secs': 0, 'played': 0, 'errs': 0}
+
 
 def calculate_wpm(typed, secs):
     """Calculate WPM (words per minute) from typed characters and seconds."""
     return (typed / 5) / (secs / 60) if secs > 0 else 0
 
-def calculate_points(wpm, accuracy, races):
-    """Calculate total points using the formula per race."""
-    return (100 + (wpm / 2)) * accuracy * races
 
 def calculate_accuracy(typed, errs):
-    """Calculate accuracy as a percentage."""
+    """Calculate accuracy as a fraction."""
     return (typed - errs) / typed if typed > 0 else 0
 
-# Save the timestamp of the script execution
-timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+def calculate_points(wpm, accuracy, races):
+    """Calculate total points using the formula: (100 + (wpm/2)) * accuracy * races."""
+    return (100 + (wpm / 2)) * accuracy * races
+
+
+# Use UTC for timestamp and filenames.
+utc_timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 with open("timestamp.txt", "w") as file:
-    file.write(f"Last Updated: {timestamp}")
+    file.write(f"Last Updated: {utc_timestamp}")
 
 # Ensure a folder called 'csv_archive' exists
 csv_archive_dir = "csv_archive"
@@ -93,14 +99,13 @@ for team_tag in TEAM_TAGS:
     played = team_stats['played']
     errs = team_stats['errs']
 
-    # Calculate team-level WPM, accuracy, and total points
-    accuracy = calculate_accuracy(typed, errs)
-    wpm = calculate_wpm(typed, secs)
-    points = calculate_points(wpm, accuracy, played)
+    team_accuracy = calculate_accuracy(typed, errs)
+    team_wpm = calculate_wpm(typed, secs)
+    team_points = calculate_points(team_wpm, team_accuracy, played)
 
     team_summary[team_tag] = {
         'Team': team_tag,
-        'TotalPoints': points,
+        'TotalPoints': team_points,
         'Racers': sum(1 for player in season_data if player.get('points') is not None),
         'Races': played
     }
@@ -109,22 +114,21 @@ for team_tag in TEAM_TAGS:
     for member in season_data:
         if member.get('points') is not None:
             username = member.get('username', 'N/A')
-            display_name = member.get('displayName', 'N/A')
+            display_name = member.get('displayName', 'Unknown')
             profile_link = f"https://www.nitrotype.com/racer/{username}"
-            title = member.get('title', 'N/A')
+            title = member.get('title', 'No Title')
             car_id = member.get('carID', 0)
             hue_angle = member.get('carHueAngle', 0)
 
             # Convert values to integers
-            typed = int(member.get('typed', 0))  # Convert to integer
-            secs = int(member.get('secs', 0))    # Convert to integer
-            errs = int(member.get('errs', 0))    # Convert to integer
-            races = int(member.get('played', 0))  # Convert to integer
+            ind_typed = int(member.get('typed', 0))
+            ind_secs = int(member.get('secs', 0))
+            ind_errs = int(member.get('errs', 0))
+            ind_races = int(member.get('played', 0))
 
-            # Correct WPM calculation
-            speed = calculate_wpm(typed, secs)
-            accuracy = calculate_accuracy(typed, errs)
-            points = calculate_points(speed, accuracy, races)
+            ind_accuracy = calculate_accuracy(ind_typed, ind_errs)
+            ind_wpm = calculate_wpm(ind_typed, ind_secs)
+            ind_points = calculate_points(ind_wpm, ind_accuracy, ind_races)
 
             all_players.append({
                 'Username': username,
@@ -133,10 +137,10 @@ for team_tag in TEAM_TAGS:
                 'Title': title,
                 'CarID': car_id,
                 'CarHueAngle': hue_angle,
-                'Speed': speed,
-                'Races': races,
-                'Points': points,
-                'Accuracy': accuracy * 100,  # Convert to percentage for display
+                'Speed': ind_wpm,
+                'Races': ind_races,
+                'Points': ind_points,
+                'Accuracy': ind_accuracy * 100,
                 'Team': team_tag
             })
 
@@ -146,11 +150,11 @@ else:
     df = pd.DataFrame(all_players)
     df = df.sort_values(by='Points', ascending=False)
 
-    timestamp_filename = datetime.now().strftime("%Y%m%d")
-    # Save player leaderboard in csv_archive
-    df.to_csv(os.path.join(csv_archive_dir, f'nitrotype_season_leaderboard_{timestamp_filename}.csv'), index=False)
+    utc_filename = datetime.utcnow().strftime("%Y%m%d")
+    # Save player leaderboard CSV in csv_archive folder based on UTC date.
+    df.to_csv(os.path.join(csv_archive_dir, f'nitrotype_season_leaderboard_{utc_filename}.csv'), index=False)
 
     df_teams = pd.DataFrame(list(team_summary.values()))
     df_teams = df_teams.sort_values(by='TotalPoints', ascending=False)
-    # Save team leaderboard in csv_archive
-    df_teams.to_csv(os.path.join(csv_archive_dir, f'nitrotype_team_leaderboard_{timestamp_filename}.csv'), index=False)
+    # Save team leaderboard CSV in csv_archive folder based on UTC date.
+    df_teams.to_csv(os.path.join(csv_archive_dir, f'nitrotype_team_leaderboard_{utc_filename}.csv'), index=False)

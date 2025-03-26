@@ -135,30 +135,31 @@
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script>
-    // Fetch the timestamp from timestamp.txt, convert it to the user's local time, and display it.
+    // Fetch the timestamp from timestamp.txt as UTC and display it.
     fetch("timestamp.txt")
       .then(response => response.text())
       .then(text => {
-        // Strip the "Last Updated:" prefix and trim whitespace.
+        // Remove "Last Updated:" prefix and trim spaces
         const serverTimestamp = text.replace("Last Updated:", "").trim();
-        const localTime = new Date(serverTimestamp).toLocaleString();
-        document.getElementById("lastUpdated").textContent = "Last Updated (Local Time): " + localTime;
+        // We assume the saved timestamp is in UTC.
+        const utcDate = new Date(serverTimestamp + " UTC");
+        document.getElementById("lastUpdated").textContent = "Last Updated (UTC): " + utcDate.toLocaleString() + " UTC";
       })
       .catch(error => {
         console.error("Error fetching the timestamp:", error);
         document.getElementById("lastUpdated").textContent = "Last Updated: Error loading timestamp.";
       });
 
-    // Helper: Format date as YYYYMMDD for file names.
-    function formatDate(date) {
-      const y = date.getFullYear();
-      const m = String(date.getMonth() + 1).padStart(2, '0');
-      const d = String(date.getDate()).padStart(2, '0');
+    // Helper: Format date as YYYYMMDD using UTC, for file names.
+    function formatUTCDate(date) {
+      const y = date.getUTCFullYear();
+      const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+      const d = String(date.getUTCDate()).padStart(2, '0');
       return y + m + d;
     }
     
-    // Update CSV path to use the csv_archive folder.
-    const playerCsv = `csv_archive/nitrotype_season_leaderboard_${formatDate(new Date())}.csv`;
+    // Update CSV path to use the csv_archive folder and UTC date.
+    const playerCsv = `csv_archive/nitrotype_season_leaderboard_${formatUTCDate(new Date())}.csv`;
 
     Papa.parse(playerCsv, {
       download: true,

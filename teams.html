@@ -117,36 +117,38 @@
       </tr>
     </thead>
   </table>
-
+  
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script>
-    // Fetch the timestamp from timestamp.txt, convert to local time, and display it.
+    // Fetch the timestamp from timestamp.txt, interpret it as UTC, then convert to local display with "UTC" label
     fetch("timestamp.txt")
       .then(response => response.text())
       .then(text => {
-        // Remove "Last Updated:" prefix and trim whitespace.
+        // Remove "Last Updated:" prefix and trim spaces.
         const serverTimestamp = text.replace("Last Updated:", "").trim();
-        const localTime = new Date(serverTimestamp).toLocaleString();
-        document.getElementById("lastUpdated").textContent = "Last Updated (Local Time): " + localTime;
+        // Create a Date using UTC string by appending ' UTC'
+        const utcDate = new Date(serverTimestamp + " UTC");
+        // Display the date as a locale string, with "UTC" label appended.
+        document.getElementById("lastUpdated").textContent = "Last Updated (UTC): " + utcDate.toLocaleString() + " UTC";
       })
       .catch(error => {
         console.error("Error fetching the timestamp:", error);
         document.getElementById("lastUpdated").textContent = "Last Updated: Error loading timestamp.";
       });
 
-    // Helper: Format date as YYYYMMDD for file names.
-    function formatDate(date) {
-      const y = date.getFullYear();
-      const m = String(date.getMonth() + 1).padStart(2, '0');
-      const d = String(date.getDate()).padStart(2, '0');
+    // Helper: Format date as YYYYMMDD using UTC date methods.
+    function formatUTCDate(date) {
+      const y = date.getUTCFullYear();
+      const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+      const d = String(date.getUTCDate()).padStart(2, '0');
       return y + m + d;
     }
 
-    // Update the CSV path to point to the csv_archive folder.
-    const teamCsv = `csv_archive/nitrotype_team_leaderboard_${formatDate(new Date())}.csv`;
+    // Use the UTC date to determine the CSV filename (saved in csv_archive folder)
+    const teamCsv = `csv_archive/nitrotype_team_leaderboard_${formatUTCDate(new Date())}.csv`;
 
     Papa.parse(teamCsv, {
       download: true,
@@ -159,11 +161,11 @@
           .map((t, i) => ({
             rank: i + 1,
             team: t.Team,
-            points: Math.round(parseFloat(t.TotalPoints)) || 0,  // Round Total Points to nearest whole number
+            points: Math.round(parseFloat(t.TotalPoints)) || 0,
             racers: t.Racers || 0,
             races: t.Races || 0
           }));
-
+    
         $('#teamLeaderboard').DataTable({
           data: teamData,
           pageLength: 50,
