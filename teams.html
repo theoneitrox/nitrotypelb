@@ -123,11 +123,14 @@
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script>
-    // Fetch the timestamp from timestamp.txt
+    // Fetch the timestamp from timestamp.txt, convert it to local time, and display it.
     fetch("timestamp.txt")
       .then(response => response.text())
       .then(text => {
-        document.getElementById("lastUpdated").textContent = text;
+        // Remove prefix "Last Updated:" and trim whitespace
+        const serverTimestamp = text.replace("Last Updated:", "").trim();
+        const localTime = new Date(serverTimestamp).toLocaleString();
+        document.getElementById("lastUpdated").textContent = "Last Updated (Local Time): " + localTime;
       })
       .catch(error => {
         console.error("Error fetching the timestamp:", error);
@@ -156,8 +159,8 @@
             rank: i + 1,
             team: t.Team,
             points: Math.round(parseFloat(t.TotalPoints)) || 0,  // Round Total Points to nearest whole number
-            racers: t.Racers || 0,  // Number of racers in the team
-            races: t.Races || 0     // Total races played by the team
+            racers: t.Racers || 0,
+            races: t.Races || 0
           }));
 
         $('#teamLeaderboard').DataTable({
@@ -165,7 +168,6 @@
           pageLength: 50,
           order: [[2, 'desc']],
           columnDefs: [
-            // For every column, use descending order as the default sort sequence.
             { targets: '_all', orderSequence: ["desc", "asc"] }
           ],
           dom: '<"top"lf>rt<"bottom"ip>',

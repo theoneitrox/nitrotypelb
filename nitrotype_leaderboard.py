@@ -1,3 +1,4 @@
+import os
 import requests
 import pandas as pd
 from datetime import datetime
@@ -71,6 +72,11 @@ timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 with open("timestamp.txt", "w") as file:
     file.write(f"Last Updated: {timestamp}")
 
+# Ensure a folder called 'csv_archive' exists
+csv_archive_dir = "csv_archive"
+if not os.path.exists(csv_archive_dir):
+    os.makedirs(csv_archive_dir)
+
 all_players = []
 team_summary = {}  # Store team stats
 
@@ -141,8 +147,10 @@ else:
     df = df.sort_values(by='Points', ascending=False)
 
     timestamp_filename = datetime.now().strftime("%Y%m%d")
-    df.to_csv(f'nitrotype_season_leaderboard_{timestamp_filename}.csv', index=False)
+    # Save player leaderboard in csv_archive
+    df.to_csv(os.path.join(csv_archive_dir, f'nitrotype_season_leaderboard_{timestamp_filename}.csv'), index=False)
 
     df_teams = pd.DataFrame(list(team_summary.values()))
     df_teams = df_teams.sort_values(by='TotalPoints', ascending=False)
-    df_teams.to_csv(f'nitrotype_team_leaderboard_{timestamp_filename}.csv', index=False)
+    # Save team leaderboard in csv_archive
+    df_teams.to_csv(os.path.join(csv_archive_dir, f'nitrotype_team_leaderboard_{timestamp_filename}.csv'), index=False)
