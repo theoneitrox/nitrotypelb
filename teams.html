@@ -123,11 +123,11 @@
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script>
-    // Fetch the timestamp from timestamp.txt, convert it to local time, and display it.
+    // Fetch the timestamp from timestamp.txt, convert to local time, and display it.
     fetch("timestamp.txt")
       .then(response => response.text())
       .then(text => {
-        // Remove prefix "Last Updated:" and trim whitespace
+        // Remove "Last Updated:" prefix and trim whitespace.
         const serverTimestamp = text.replace("Last Updated:", "").trim();
         const localTime = new Date(serverTimestamp).toLocaleString();
         document.getElementById("lastUpdated").textContent = "Last Updated (Local Time): " + localTime;
@@ -145,7 +145,8 @@
       return y + m + d;
     }
 
-    const teamCsv = `nitrotype_team_leaderboard_${formatDate(new Date())}.csv`;
+    // Update the CSV path to point to the csv_archive folder.
+    const teamCsv = `csv_archive/nitrotype_team_leaderboard_${formatDate(new Date())}.csv`;
 
     Papa.parse(teamCsv, {
       download: true,

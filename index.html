@@ -135,17 +135,13 @@
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script>
-    // Fetch the timestamp from timestamp.txt,
-    // convert it to the user's local time, and display it.
+    // Fetch the timestamp from timestamp.txt, convert it to the user's local time, and display it.
     fetch("timestamp.txt")
       .then(response => response.text())
       .then(text => {
-        // Strip the "Last Updated:" prefix and trim any extra whitespace.
+        // Strip the "Last Updated:" prefix and trim whitespace.
         const serverTimestamp = text.replace("Last Updated:", "").trim();
-        // Create a Date object.
-        const date = new Date(serverTimestamp);
-        // Convert the date to a locale string.
-        const localTime = date.toLocaleString();
+        const localTime = new Date(serverTimestamp).toLocaleString();
         document.getElementById("lastUpdated").textContent = "Last Updated (Local Time): " + localTime;
       })
       .catch(error => {
@@ -161,7 +157,8 @@
       return y + m + d;
     }
     
-    const playerCsv = `nitrotype_season_leaderboard_${formatDate(new Date())}.csv`;
+    // Update CSV path to use the csv_archive folder.
+    const playerCsv = `csv_archive/nitrotype_season_leaderboard_${formatDate(new Date())}.csv`;
 
     Papa.parse(playerCsv, {
       download: true,
@@ -173,7 +170,7 @@
           displayName: row.DisplayName || 'Unknown',
           profileLink: row.ProfileLink || '#',
           title: row.Title || 'No Title',
-          points: Math.round(parseFloat(row.Points)) || 0,   // Round points to nearest whole number
+          points: Math.round(parseFloat(row.Points)) || 0,   // Round points
           speed: Math.round(row.Speed) || 0,
           accuracy: parseFloat(row.Accuracy).toFixed(2) || 0,
           races: row.Races || 0,
