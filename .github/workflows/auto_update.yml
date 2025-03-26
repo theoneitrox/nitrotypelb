@@ -2,7 +2,7 @@ name: Update NitroType Leaderboards
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Runs every 6 hours on the hour (e.g., 00:00, 06:00, 12:00, 18:00)
+    - cron: '0 */3 * * *'  # Runs every 3 hours on the hour (e.g., 00:00, 03:00, 06:00, etc.)
   workflow_dispatch:       # Allows manual triggering from GitHub Actions
 
 jobs:
