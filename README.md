@@ -1,5 +1,4 @@
 
-```
 # NitroType Season Leaderboards
 
 
