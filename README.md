@@ -1,8 +1,7 @@
 
-```markdown
+```
 # NitroType Season Leaderboards
 
-![Project Logo or Banner](link-to-logo-or-banner)
 
 This repository contains tools to fetch and display seasonal statistics for NitroType teams. It includes a Python script to gather and process data and HTML pages to display interactive leaderboards.
 
