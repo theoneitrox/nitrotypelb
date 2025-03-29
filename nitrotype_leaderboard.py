@@ -17,7 +17,7 @@ TEAM_TAGS = [
     "TOTUF7", "F0J", "D4RKER", "TALK", "VXL", "LE4GUE", "TWO", "FUZHOU", "SK4P", "VTI",
     "GLZ", "B0MBA", "KAPOK", "ERC", "SPRME", "BMW", "NT20", "NT", "CYCV", "PTB", "XS9",
     "KBSM", "190IQ", "PCMSG", "FRLB", "ZER0SE", "PR2WX", "CZBZ", "M1NE", "NTM", "MEYBO",
-    "LXW", "ZH", "SPRINT", "EMZ", "BMW"
+    "LXW", "ZH", "SPRINT", "EMZ", "BMW", "TVX", "YE1LOW", "B4HL", "LEDIHH", "1BESTW", "ALFJ", "GOATOG", "BEES", "A3", "BR34K", "792231", "IQ200", "FOX109", "KEYNT"
 ]
 
 HEADERS = {
