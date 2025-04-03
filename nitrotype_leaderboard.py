@@ -1,7 +1,7 @@
 import os
 import requests
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
 import time
 
 TEAM_TAGS = [
@@ -82,7 +82,7 @@ def calculate_points(wpm, accuracy, races):
 
 
 # Use UTC for timestamp and filenames.
-utc_timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+utc_timestamp = datetime.datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 with open("timestamp.txt", "w") as file:
     file.write(f"Last Updated: {utc_timestamp}")
 
