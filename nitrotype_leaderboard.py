@@ -1,10 +1,9 @@
 import os
 import requests
 import pandas as pd
-from datetime import datetime, timezone
+from datetime import datetime
 import time
 
-# Updated TEAM_TAGS with your new teams
 TEAM_TAGS = [
     "PR2W", "NTPD1", "SSH", "BEEHVE", "RFTP", "S0RC", "TCHR", "NTO", "P1RE",
     "CAM0", "NCT", "PSR", "N8TE", "FASZ", "SER", "T0WER", "ZH", "LOVGOD", "DLX",
@@ -18,19 +17,22 @@ TEAM_TAGS = [
     "TOTUF7", "F0J", "D4RKER", "TALK", "VXL", "LE4GUE", "TWO", "FUZHOU", "SK4P", "VTI",
     "GLZ", "B0MBA", "KAPOK", "ERC", "SPRME", "BMW", "NT20", "NT", "CYCV", "PTB", "XS9",
     "KBSM", "190IQ", "PCMSG", "FRLB", "ZER0SE", "PR2WX", "CZBZ", "M1NE", "NTM", "MEYBO",
-    "LXW", "SPRINT", "EMZ", "TVX", "YE1LOW", "B4HL", "LEDIHH", "1BESTW", "ALFJ",
+    "LXW", "ZH", "SPRINT", "EMZ", "BMW", "TVX", "YE1LOW", "B4HL", "LEDIHH", "1BESTW", "ALFJ",
     "GOATOG", "BEES", "A3", "BR34K", "792231", "IQ200", "FOX109", "KEYNT", "REB3LS", "LDZ",
-    "OER", "1STRED", "EXTRME", "SEDYKO", "BRICS", "ZLITB", "LEGNDS", "170MPH",
+    "OER", "1STRED", "EXTRME", "SEDYKO", "BRICS", "ZLITB", "P1RE", "LEGNDS", "LEGNDS", "170MPH",
     "FORKS", "RXC", "VKS", "LEGA", "YADLRS", "183074", "132423", "MANGA", "HLRO", "DOG", "MCCU",
     "SAILR", "P7", "NTROFC", "ELXR", "PUBG10", "SHIFT2", "DB35T", "KHOGHU", "T3CHY", "NTC01",
     "NBF", "KAYVON", "WUT109", "FISHGG", "RMG", "123HEY", "JEDI1", "FG4", "WAMDOO", "201030",
     "HAC33R", "SPDLM", "UNSCF", "CR4T"
 ]
 
+TEAM_TAGS = sorted(list(set(TEAM_TAGS)), key=TEAM_TAGS.index)
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
     "Accept": "application/json",
 }
+
 
 def get_team_data(team_tag, retries=3, delay=5):
     """Fetch season data and stats from the API for a team."""
@@ -50,6 +52,7 @@ def get_team_data(team_tag, retries=3, delay=5):
             time.sleep(delay)
     return [], []
 
+
 def get_team_stats(stats):
     """Extract relevant stats from the 'board: season'."""
     for stat in stats:
@@ -62,20 +65,24 @@ def get_team_stats(stats):
             }
     return {'typed': 0, 'secs': 0, 'played': 0, 'errs': 0}
 
+
 def calculate_wpm(typed, secs):
     """Calculate WPM (words per minute) from typed characters and seconds."""
     return (typed / 5) / (secs / 60) if secs > 0 else 0
+
 
 def calculate_accuracy(typed, errs):
     """Calculate accuracy as a fraction."""
     return (typed - errs) / typed if typed > 0 else 0
 
+
 def calculate_points(wpm, accuracy, races):
     """Calculate total points using the formula: (100 + (wpm/2)) * accuracy * races."""
     return (100 + (wpm / 2)) * accuracy * races
 
+
 # Use UTC for timestamp and filenames.
-utc_timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+utc_timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 with open("timestamp.txt", "w") as file:
     file.write(f"Last Updated: {utc_timestamp}")
 
@@ -151,6 +158,11 @@ else:
     df = pd.DataFrame(all_players)
     df = df.sort_values(by='Points', ascending=False)
 
-    utc_filename = datetime.now(timezone.utc).strftime("%Y%m%d")
+    utc_filename = datetime.utcnow().strftime("%Y%m%d")
     # Save player leaderboard CSV in csv_archive folder based on UTC date.
-    df.to_csv(os.path.join(csv_archive* ▋
+    df.to_csv(os.path.join(csv_archive_dir, f'nitrotype_season_leaderboard_{utc_filename}.csv'), index=False)
+
+    df_teams = pd.DataFrame(list(team_summary.values()))
+    df_teams = df_teams.sort_values(by='TotalPoints', ascending=False)
+    # Save team leaderboard CSV in csv_archive folder based on UTC date.
+    df_teams.to_csv(os.path.join(csv_archive_dir, f'nitrotype_team_leaderboard_{utc_filename}.csv'), index=False)
