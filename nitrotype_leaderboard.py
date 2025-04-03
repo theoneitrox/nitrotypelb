@@ -17,7 +17,13 @@ TEAM_TAGS = [
     "TOTUF7", "F0J", "D4RKER", "TALK", "VXL", "LE4GUE", "TWO", "FUZHOU", "SK4P", "VTI",
     "GLZ", "B0MBA", "KAPOK", "ERC", "SPRME", "BMW", "NT20", "NT", "CYCV", "PTB", "XS9",
     "KBSM", "190IQ", "PCMSG", "FRLB", "ZER0SE", "PR2WX", "CZBZ", "M1NE", "NTM", "MEYBO",
-    "LXW", "ZH", "SPRINT", "EMZ", "BMW", "TVX", "YE1LOW", "B4HL", "LEDIHH", "1BESTW", "ALFJ", "GOATOG", "BEES", "A3", "BR34K", "792231", "IQ200", "FOX109", "KEYNT"
+    "LXW", "ZH", "SPRINT", "EMZ", "BMW", "TVX", "YE1LOW", "B4HL", "LEDIHH", "1BESTW", "ALFJ", 
+    "GOATOG", "BEES", "A3", "BR34K", "792231", "IQ200", "FOX109", "KEYNT", "REB3LS", "LDZ", 
+    "OER", "1STRED", "EXTRME", "SEDYKO", "BRICS", "ZLITB", "P1RE", "LEGNDS", "LEGNDS", "170MPH", 
+    "FORKS", "RXC", "VKS", "LEGA", "YADLRS", "183074", "132423", "MANGA", "HLRO", "DOG", "MCCU", 
+    "SAILR", "P7", "NTROFC", "ELXR", "PUBG10", "SHIFT2", "DB35T", "KHOGHU", "T3CHY", "NTC01", 
+    "NBF", "KAYVON", "WUT109", "FISHGG", "RMG", "123HEY", "JEDI1", "FG4", "WAMDOO", "201030", 
+    "HAC33R", "SPDLM", "UNSCF", "CR4T"
 ]
 
 HEADERS = {
