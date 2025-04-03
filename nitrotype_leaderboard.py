@@ -1,7 +1,7 @@
 import os
 import requests
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
 import time
 
 TEAM_TAGS = [
@@ -31,7 +31,6 @@ HEADERS = {
     "Accept": "application/json",
 }
 
-
 def get_team_data(team_tag, retries=3, delay=5):
     """Fetch season data and stats from the API for a team."""
     url = f"https://www.nitrotype.com/api/v2/teams/{team_tag}"
@@ -50,7 +49,6 @@ def get_team_data(team_tag, retries=3, delay=5):
             time.sleep(delay)
     return [], []
 
-
 def get_team_stats(stats):
     """Extract relevant stats from the 'board: season'."""
     for stat in stats:
@@ -63,24 +61,20 @@ def get_team_stats(stats):
             }
     return {'typed': 0, 'secs': 0, 'played': 0, 'errs': 0}
 
-
 def calculate_wpm(typed, secs):
     """Calculate WPM (words per minute) from typed characters and seconds."""
     return (typed / 5) / (secs / 60) if secs > 0 else 0
-
 
 def calculate_accuracy(typed, errs):
     """Calculate accuracy as a fraction."""
     return (typed - errs) / typed if typed > 0 else 0
 
-
 def calculate_points(wpm, accuracy, races):
     """Calculate total points using the formula: (100 + (wpm/2)) * accuracy * races."""
     return (100 + (wpm / 2)) * accuracy * races
 
-
 # Use UTC for timestamp and filenames.
-utc_timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+utc_timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 with open("timestamp.txt", "w") as file:
     file.write(f"Last Updated: {utc_timestamp}")
 
@@ -156,7 +150,7 @@ else:
     df = pd.DataFrame(all_players)
     df = df.sort_values(by='Points', ascending=False)
 
-    utc_filename = datetime.utcnow().strftime("%Y%m%d")
+    utc_filename = datetime.now(timezone.utc).strftime("%Y%m%d")
     # Save player leaderboard CSV in csv_archive folder based on UTC date.
     df.to_csv(os.path.join(csv_archive_dir, f'nitrotype_season_leaderboard_{utc_filename}.csv'), index=False)
 
