@@ -24,7 +24,7 @@ TEAM_TAGS = [
     "SAILR", "P7", "NTROFC", "ELXR", "PUBG10", "SHIFT2", "DB35T", "KHOGHU", "T3CHY", "NTC01",
     "NBF", "KAYVON", "WUT109", "FISHGG", "RMG", "123HEY", "JEDI1", "FG4", "WAMDOO", "201030",
     "HAC33R", "SPDLM", "UNSCF", "CR4T", "CHONT", "VG", "F1ERCE", "TYZ", "EMP1R3", "WP",
-    "TMW"
+    "TMW", "XMVP"
 ]
 
 TEAM_TAGS = sorted(list(set(TEAM_TAGS)), key=TEAM_TAGS.index)
