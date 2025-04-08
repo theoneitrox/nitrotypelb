@@ -23,10 +23,11 @@ TEAM_TAGS = [
     "FORKS", "RXC", "VKS", "LEGA", "YADLRS", "183074", "132423", "MANGA", "HLRO", "DOG", "MCCU",
     "SAILR", "P7", "NTROFC", "ELXR", "PUBG10", "SHIFT2", "DB35T", "KHOGHU", "T3CHY", "NTC01",
     "NBF", "KAYVON", "WUT109", "FISHGG", "RMG", "123HEY", "JEDI1", "FG4", "WAMDOO", "201030",
-    "HAC33R", "SPDLM", "UNSCF", "CR4T", "CHONT", "VG", "F1ERCE", "TYZ", "EMP1R3", "WP", "TMW", "XMVP", "HFE", "TVM", "IR"
+    "HAC33R", "SPDLM", "UNSCF", "CR4T", "CHONT", "VG", "F1ERCE", "TYZ", "EMP1R3", "WP", "TMW",
+    "XMVP", "HFE", "TVM", "IR", "AV", "XBTP", "42712", "TDTY"
 ]
 
-TEAM_TAGS = sorted(list(set(TEAM_TAGS)), key=TEAM_TAGS.index)
+
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
