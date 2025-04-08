@@ -27,6 +27,7 @@ TEAM_TAGS = [
     "XMVP", "HFE", "TVM", "IR", "AV", "XBTP", "42712", "TDTY"
 ]
 
+TEAM_TAGS = sorted(list(set(TEAM_TAGS)), key=TEAM_TAGS.index)
 
 
 HEADERS = {
