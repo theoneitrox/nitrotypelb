@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime, timezone
 import time
 
+
 TEAM_TAGS = [
     "PR2W", "NTPD1", "SSH", "BEEHVE", "RFTP", "S0RC", "TCHR", "NTO", "P1RE",
     "CAM0", "NCT", "PSR", "N8TE", "FASZ", "SER", "T0WER", "ZH", "LOVGOD", "DLX",
@@ -19,12 +20,14 @@ TEAM_TAGS = [
     "KBSM", "190IQ", "PCMSG", "FRLB", "ZER0SE", "PR2WX", "CZBZ", "M1NE", "NTM", "MEYBO",
     "LXW", "ZH", "SPRINT", "EMZ", "BMW", "TVX", "YE1LOW", "B4HL", "LEDIHH", "1BESTW", "ALFJ",
     "GOATOG", "BEES", "A3", "BR34K", "792231", "IQ200", "FOX109", "KEYNT", "REB3LS", "LDZ",
-    "OER", "1STRED", "EXTRME", "SEDYKO", "BRICS", "ZLITB", "P1RE", "LEGNDS", "LEGNDS", "170MPH",
+    "OER", "1STRED", "EXTRME", "SEDYKO", "BRICS", "ZLITB", "P1RE", "LEGNDS", "170MPH",
     "FORKS", "RXC", "VKS", "LEGA", "YADLRS", "183074", "132423", "MANGA", "HLRO", "DOG", "MCCU",
     "SAILR", "P7", "NTROFC", "ELXR", "PUBG10", "SHIFT2", "DB35T", "KHOGHU", "T3CHY", "NTC01",
     "NBF", "KAYVON", "WUT109", "FISHGG", "RMG", "123HEY", "JEDI1", "FG4", "WAMDOO", "201030",
     "HAC33R", "SPDLM", "UNSCF", "CR4T", "CHONT", "VG", "F1ERCE", "TYZ", "EMP1R3", "WP", "TMW",
-    "XMVP", "HFE", "TVM", "IR", "AV", "XBTP", "42712", "TDTY"
+    "XMVP", "HFE", "TVM", "IR", "AV", "XBTP", "42712", "TDTY",
+    "FERAL", "MEYBO", "LZNT", "XIII", "KNTT", "FTHM", "L3JENS", "C0NQUE", "BAR0NS",
+    "WERTQY", "TFV", "WP", "QC", "IR", "PIRC", "FTHM", "1STRED", "FFS", "RR"
 ]
 
 TEAM_TAGS = sorted(list(set(TEAM_TAGS)), key=TEAM_TAGS.index)
