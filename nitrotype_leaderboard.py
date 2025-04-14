@@ -22,7 +22,7 @@ TEAM_TAGS = [
     "GOATOG", "BEES", "A3", "BR34K", "792231", "IQ200", "FOX109", "REB3LS", "LDZ",
     "OER", "1STRED", "EXTRME", "SEDYKO", "BRICS", "P1RE", "LEGNDS", "170MPH",
     "FORKS", "VKS", "YADLRS", "JEDI1", "FG4", "WAMDOO", "201030",
-    "HAC33R", "SPDLM", "UNSCF", "CR4T", "CHONT", "VG", "F1ERCE", "TYZ", "EMP1R3", "WP", "TMW",
+    "HAC33R", "SPDLM", "UNSCF", "CHONT", "VG", "F1ERCE", "TYZ", "EMP1R3", "WP", "TMW",
     "XMVP", "HFE", "TVM", "IR", "AV", "XBTP", "42712", "TDTY",
     "FERAL", "MEYBO", "LZNT", "XIII", "KNTT", "FTHM", "L3JENS", "C0NQUE", "BAR0NS",
     "WERTQY", "TFV", "WP", "QC", "IR", "PIRC", "FTHM", "1STRED", "FFS", "RR", "VIELLE", "VS"
